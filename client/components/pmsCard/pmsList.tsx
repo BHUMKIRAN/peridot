@@ -13,11 +13,16 @@ const PMSList = ({ filterModel }: PMSListProps) => {
 
   useEffect(() => {
     const getData = async () => {
-      const data = await fetchAllPMS();
-      if (filterModel) {
-        setPmsList(data.filter((item: PMS) => item.modelType === filterModel));
-      } else {
-        setPmsList(data);
+      try {
+        const data = await fetchAllPMS();
+        if (filterModel) {
+          setPmsList(data.filter((item: PMS) => item.modelType === filterModel));
+        } else {
+          setPmsList(data);
+        }
+      } catch (error) {
+        console.error("Failed to fetch PMS data:", error);
+        setPmsList([]);
       }
     };
     getData();
