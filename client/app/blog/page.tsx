@@ -3,15 +3,16 @@ import { client } from "@/lib/contentful";
 import Navbar from "@/components/home/Navbar";
 
 const blogPage = async () => {
-  let res;
+  let res: any = null;
 
-  try {
-    res = await client.getEntries({
-      content_type: "pageBlogPost",
-    });
-  } catch (error) {
-    console.error("Contentful fetch error:", error);
-    return <div className="text-center mt-10 text-red-500">Failed to load blog posts</div>;
+  if (client) {
+    try {
+      res = await client.getEntries({
+        content_type: "pageBlogPost",
+      });
+    } catch (error) {
+      console.error("Contentful fetch error:", error);
+    }
   }
 
   const items = res?.items || [];
