@@ -1,7 +1,13 @@
 // src/api/pmsApi.js
 import axios from "axios";
 
-const BASE_URL = "http://localhost:8080/pms";
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
+
+if (!API_BASE_URL) {
+  throw new Error("Missing NEXT_PUBLIC_API_URL in environment variables");
+}
+
+const BASE_URL = `${API_BASE_URL.replace(/\/$/, "")}/pms`;
 
 export interface LossSharing {
   clientPercentage: number;
