@@ -1,0 +1,17 @@
+client/node_modules/
+server/node_modules/
+client/.next/
+client/out/
+client/dist/
+server/dist/
+
+# Env files
+client/.env.local
+server/.env
+*.env
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
