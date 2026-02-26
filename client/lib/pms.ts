@@ -2,11 +2,8 @@
 import axios from "axios";
 
 const getBaseUrl = (): string | null => {
-  const apiBaseUrl = process.env.NEXT_PUBLIC_API_URL;
-  if (!apiBaseUrl) {
-    return null;
-  }
-  return `${apiBaseUrl.replace(/\/$/, "")}/pms`;
+  const apiBaseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080";
+  return apiBaseUrl.replace(/\/$/, "");
 };
 
 export interface LossSharing {
@@ -40,15 +37,12 @@ export const fetchAllPMS = async (): Promise<PMS[]> => {
     return [];
   }
 
-  const res = await axios.get<PMS[]>(`${baseUrl}/all`);
+  const res = await axios.get<PMS[]>(`${baseUrl}/pms`);
   return res.data;
 };
 
 export const createPMS = async (data: CreatePMSPayload): Promise<PMS> => {
   const baseUrl = getBaseUrl();
-  if (!baseUrl) {
-    throw new Error("Missing NEXT_PUBLIC_API_URL in environment variables");
-  }
 
   const res = await axios.post<PMS>(`${baseUrl}/pms`, data);
   return res.data;
@@ -58,10 +52,6 @@ export const simulateLoss = async (
   data: SimulateLossPayload
 ): Promise<PMS[]> => {
   const baseUrl = getBaseUrl();
-  if (!baseUrl) {
-    throw new Error("Missing NEXT_PUBLIC_API_URL in environment variables");
-  }
-
   const res = await axios.post<PMS[]>(`${baseUrl}/simulateLoss`, data);
   return res.data;
 };

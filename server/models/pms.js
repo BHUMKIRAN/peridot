@@ -10,6 +10,13 @@ const pmsSchema = new mongoose.Schema({
     clientPercentage: { type: Number, required: true },
     companyPercentage: { type: Number, required: true },
   },
+  history: [
+    {
+      date: { type: Date, default: Date.now },
+      value: Number,
+      type: { type: String, enum: ["gain", "loss", "initial"] }
+    }
+  ],
   createdAt: { type: Date, default: Date.now },
 });
 

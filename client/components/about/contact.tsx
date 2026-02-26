@@ -3,6 +3,7 @@ import { useState } from "react"
 import axios from "axios"
 
 const Contact = () => {
+  const apiBaseUrl = (process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080").replace(/\/$/, "")
 
   const [data, setData] = useState({
     name: "",
@@ -25,7 +26,7 @@ const Contact = () => {
     setData(formData)
 
     try {
-      const res = await axios.post("http://localhost:8080/query", formData)
+      const res = await axios.post(`${apiBaseUrl}/query`, formData)
 
       if (res.data) {
         alert("Your message has been sent")

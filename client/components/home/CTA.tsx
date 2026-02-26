@@ -20,6 +20,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 
 const CTA = () => {
+  const apiBaseUrl = (process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080").replace(/\/$/, "")
 
   const [loading, setLoading] = useState(false)
 
@@ -38,7 +39,7 @@ const CTA = () => {
       setLoading(true)
 
       const res = await axios.post(
-        "http://localhost:8080/register",
+        `${apiBaseUrl}/register`,
         data
       )
 

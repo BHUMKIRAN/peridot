@@ -63,5 +63,26 @@ const getAllPMS = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+// controllers/pmsController.js
+
+export const getChartData = async (req, res) => {
+  try {
+    const allPMS = await pmsSchema.find();
+    
+    // Transform the data so Recharts can read it
+    // We map investment vs current value to show profit/loss
+    const formattedData = allPMS.map((pms) => {
+      const profitOrLoss = pms.currentValue - pms.investmentAmount;
+      return {   // e.g., "Diamond Account"
+        amount: profitOrLoss, // This will be negative if current < investment
+        fill: profitOrLoss >= 0 ? "#10b981" : "#ef4444" // Green for gain, Red for loss
+      };
+    });
+
+    res.status(200).json(formattedData);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
 
 export { createPMS, simulateLoss, getAllPMS };
