@@ -22,15 +22,13 @@ const Navbar = () => {
                     </li>
                 </ul>
             </div>
-
-            {/* CTA Buttons */}
-            <div className='flex items-center gap-6'>
-                <button className='text-sm font-semibold text-slate-700 hover:text-emerald-600 transition-colors'>
-                    Login
-                </button>
-                <button className='bg-emerald-600 hover:bg-emerald-700 text-white px-5 py-2 rounded-full text-sm font-semibold shadow-md shadow-emerald-200 transition-all active:scale-95'>
-                    Sign up
-                </button>
+            <div className='flex items-center gap-5'>
+                <Link href="/support" className='hidden sm:block text-sm font-medium text-slate-500 hover:text-emerald-600'>
+                    Help Center
+                </Link>
+                <Link href="/book-call" className='bg-emerald-50 text-emerald-700 border border-emerald-200 hover:bg-emerald-100 px-5 py-2 rounded-lg text-sm font-bold transition-colors'>
+                    Book a Demo
+                </Link>
             </div>
         </nav>
     )

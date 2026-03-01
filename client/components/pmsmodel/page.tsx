@@ -5,20 +5,14 @@ import { useRouter } from "next/navigation";
 import { 
   Dialog, 
   DialogContent, 
-  DialogDescription, 
   DialogHeader, 
   DialogTitle, 
   DialogTrigger,
-  DialogClose 
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { Gem, Crown, ArrowRight, X } from "lucide-react";
+import { Gem, Crown, ArrowRight } from "lucide-react";
 
-interface LandingPageProps {
-  open: boolean;
-}
-
-const LandingPage = ({ open }: LandingPageProps) => {
+const LandingPage = ({ open }: { open: boolean }) => {
   const router = useRouter();
 
   if (!open) return null;
@@ -27,68 +21,62 @@ const LandingPage = ({ open }: LandingPageProps) => {
     <Dialog>
       <DialogTrigger asChild>
         <Button 
-          variant="outline" 
-          className="rounded-full border-slate-200 font-bold px-8 hover:bg-slate-50 hover:text-emerald-600 transition-all"
+          variant="outline"
+          className="rounded-full border-slate-200 px-8 py-6 font-black uppercase tracking-widest text-[10px] hover:bg-slate-50 hover:text-emerald-600 transition-all shadow-sm"
         >
-          View PMS
+          View Portfolio
         </Button>
       </DialogTrigger>
 
-      <DialogContent className="sm:max-w-md border-none bg-white rounded-[2rem] p-0 overflow-hidden shadow-2xl">
-        {/* Decorative Header */}
-        <div className="bg-emerald-900 p-8 text-center space-y-2 relative">
-          <DialogHeader>
-            <DialogTitle className="text-white text-2xl font-black tracking-tight">
+      <DialogContent className="sm:max-w-[380px] p-0 overflow-hidden border border-slate-100 shadow-[0_30px_60px_-15px_rgba(0,0,0,0.05)] bg-white rounded-[2rem]">
+        <div className="p-10">
+          <DialogHeader className="mb-8 space-y-2 text-center">
+            <div className="mx-auto w-10 h-1 bg-emerald-500 rounded-full mb-4" />
+            <DialogTitle className="text-2xl font-black text-slate-900 tracking-tighter uppercase">
               Select Tier
             </DialogTitle>
-            <DialogDescription className="text-slate-400 font-medium uppercase text-[10px] tracking-[0.2em]">
-              Choose Your Portfolio Experience
-            </DialogDescription>
+            <p className="text-[11px] font-bold text-slate-400 uppercase tracking-widest">
+              Private Client Access
+            </p>
           </DialogHeader>
+
+          <div className="grid gap-4">
+            {/* Diamond Tier */}
+            <button 
+              onClick={() => router.push('/diamond')}
+              className="group flex items-center justify-between p-5 rounded-2xl border border-slate-50 bg-slate-50/50 hover:border-emerald-500 hover:bg-white hover:shadow-xl hover:shadow-emerald-500/5 transition-all text-left"
+            >
+              <div className="flex items-center gap-5">
+              
+                <div>
+                  <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1">Elite</p>
+                  <p className="font-bold text-slate-900 text-sm">Diamond Experience</p>
+                </div>
+              </div>
+              <ArrowRight size={18} className="text-slate-300 group-hover:text-emerald-600 group-hover:translate-x-1 transition-all" />
+            </button>
+
+            {/* Platinum Tier */}
+            <button 
+              onClick={() => router.push('/platinum')}
+              className="group flex items-center justify-between p-5 rounded-2xl border border-slate-50 bg-slate-50/50 hover:border-indigo-500 hover:bg-white hover:shadow-xl hover:shadow-indigo-500/5 transition-all text-left"
+            >
+              <div className="flex items-center gap-5">
+               
+                <div>
+                  <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1">Standard</p>
+                  <p className="font-bold text-slate-900 text-sm">Platinum Portal</p>
+                </div>
+              </div>
+              <ArrowRight size={18} className="text-slate-300 group-hover:text-indigo-600 group-hover:translate-x-1 transition-all" />
+            </button>
+          </div>
         </div>
 
-        <div className="p-6 space-y-4 bg-white">
-          {/* Diamond Tier Option */}
-          <button 
-            onClick={() => router.push('/diamond')}
-            className="w-full flex items-center justify-between p-6 rounded-2xl border border-slate-100 bg-slate-50 hover:border-emerald-500 hover:bg-emerald-50/30 transition-all group"
-          >
-            <div className="flex items-center gap-5">
-              <div className="p-3 bg-white rounded-xl shadow-sm text-emerald-600 group-hover:scale-110 transition-transform">
-                <Gem size={24} />
-              </div>
-              <div className="text-left">
-                <p className="font-black text-slate-900 uppercase tracking-widest text-xs">Diamond</p>
-                <p className="text-sm text-slate-500 font-medium">Ultra-High Net Worth Analytics</p>
-              </div>
-            </div>
-            <ArrowRight size={18} className="text-slate-300 group-hover:text-emerald-600 group-hover:translate-x-1 transition-all" />
-          </button>
-
-          {/* Platinum Tier Option */}
-          <button 
-            onClick={() => router.push('/platinum')}
-            className="w-full flex items-center justify-between p-6 rounded-2xl border border-slate-100 bg-slate-50 hover:border-emerald-500 hover:bg-emerald-50/30 transition-all group"
-          >
-            <div className="flex items-center gap-5">
-              <div className="p-3 bg-white rounded-xl shadow-sm text-slate-400 group-hover:scale-110 transition-transform">
-                <Crown size={24} />
-              </div>
-              <div className="text-left">
-                <p className="font-black text-slate-900 uppercase tracking-widest text-xs text-slate-400">Platinum</p>
-                <p className="text-sm text-slate-500 font-medium">Standard Institutional Portal</p>
-              </div>
-            </div>
-            <ArrowRight size={18} className="text-slate-300 group-hover:text-emerald-600 group-hover:translate-x-1 transition-all" />
-          </button>
-
-          <div className="pt-4">
-            <DialogClose asChild>
-              <Button variant="ghost" className="w-full text-slate-400 font-bold hover:text-slate-900 text-xs uppercase tracking-widest">
-                Cancel
-              </Button>
-            </DialogClose>
-          </div>
+        <div className="py-6 bg-slate-50/30 text-center border-t border-slate-50">
+           <button className="text-[9px] font-black text-slate-300 uppercase tracking-[0.3em] hover:text-slate-900 transition-colors">
+             Terms of Private Access
+           </button>
         </div>
       </DialogContent>
     </Dialog>

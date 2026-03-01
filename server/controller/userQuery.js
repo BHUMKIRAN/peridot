@@ -2,6 +2,7 @@ import Query from "../models/userQueries.js"
 
 const createQuery = async (req , res)=>{
     try {
+        console.log(req.body)
         const query = await Query.create(req.body)
         res.status(200).json(query)
     }catch(error){

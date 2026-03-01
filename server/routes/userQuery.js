@@ -7,4 +7,4 @@ const router = Router();
 router.post('/query', createQuery)
 router.get('/query' , getallQuery)
 
-export default router
+export default router   

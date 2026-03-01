@@ -18,10 +18,14 @@ const querySchema = new Schema(
       required: [true, "Message is required"],
       trim: true,
     },
+    terms: {
+      type: Boolean,
+      required: true, 
+    },
     page: {
       type: String,
       default: "About Us", // Track which page the enquiry came from
-    },
+    }, 
     createdAt: {
       type: Date,
       default: Date.now,

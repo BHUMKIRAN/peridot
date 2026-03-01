@@ -17,26 +17,24 @@ const blogPage = async () => {
 
   const items = res?.items || [];
   const getViews = (post: any) => Number(post.fields?.views) || 0;
-  
+
   // Sort and Slice for Sidebar
   const topPosts = [...items].sort((a, b) => getViews(b) - getViews(a)).slice(0, 5);
 
   return (
     <div className="bg-white min-h-screen font-sans">
       <Navbar />
-      
+
       {/* Header Space */}
       <div className="pt-16 pb-10 px-8 max-w-7xl mx-auto">
-        <h2 className="text-emerald-600 font-bold uppercase tracking-widest text-sm mb-3">
-          Our Journal
-        </h2>
+
         <h1 className="text-4xl md:text-6xl font-black text-slate-900 tracking-tight">
           Insights & <span className="text-slate-400 font-medium">Market Trends</span>
         </h1>
       </div>
 
       <main className="max-w-7xl mx-auto px-8 grid grid-cols-1 lg:grid-cols-12 gap-16 pb-24">
-        
+
         {/* Left Column: Main Feed (8 Cols) */}
         <div className="lg:col-span-8 space-y-12">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
@@ -66,11 +64,11 @@ const blogPage = async () => {
                     <span>•</span>
                     <span className="flex items-center gap-1"><Eye size={12} /> {getViews(post)}</span>
                   </div>
-                  
+
                   <h2 className="text-2xl font-bold text-slate-900 group-hover:text-emerald-600 transition-colors leading-tight">
                     {post.fields?.title || "Untitled Post"}
                   </h2>
-                  
+
                   <p className="text-slate-500 line-clamp-2 text-sm leading-relaxed">
                     {post.fields?.description || "Exploring the future of digital wealth management and secure transactions."}
                   </p>
@@ -86,7 +84,7 @@ const blogPage = async () => {
 
         {/* Right Column: Sidebar (4 Cols) */}
         <aside className="lg:col-span-4 space-y-12">
-          
+
           {/* Refined Search */}
           <div className="relative group">
             <input
@@ -102,7 +100,7 @@ const blogPage = async () => {
             <h3 className="text-xl font-bold text-slate-900 mb-8 flex items-center gap-2">
               Popular <span className="text-emerald-600">Insights</span>
             </h3>
-            
+
             <div className="space-y-8">
               {topPosts.map((post: any, idx) => (
                 <div key={post.sys.id} className="flex gap-4 group cursor-pointer">
@@ -121,19 +119,7 @@ const blogPage = async () => {
               ))}
             </div>
           </div>
-
-          {/* Newsletter / CTA Sidebar Card */}
-          <div className="bg-emerald-600 rounded-[2.5rem] p-8 text-white">
-            <h4 className="text-xl font-bold mb-3">Stay Updated</h4>
-            <p className="text-emerald-100 text-sm mb-6 leading-relaxed">
-              Get the latest financial trends delivered to your inbox weekly.
-            </p>
-            <button className="w-full bg-white text-emerald-600 font-bold py-3 rounded-xl hover:bg-emerald-50 transition-colors">
-              Subscribe
-            </button>
-          </div>
         </aside>
-
       </main>
     </div>
   );
