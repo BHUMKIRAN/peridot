@@ -3,9 +3,14 @@ import axiosInstance from "./axiosInstance";
 import { useQuery } from "@tanstack/react-query";
 import { Users } from "lucide-react";
 
+type User = {
+  _id: string;
+  name: string;
+};
+
 
 // ✅ API function (ONLY fetches data)
-const fetchUsers = async () => {
+const fetchUsers = async (): Promise<User[]> => {
   const res = await axiosInstance.get("/user");
   return res.data;
 };
