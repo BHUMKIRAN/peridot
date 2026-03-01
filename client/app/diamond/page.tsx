@@ -1,129 +1,195 @@
 "use client";
+
+import { useSelector } from "react-redux";
+import type { RootState } from "@/redux/store";
 import { ChartBarNegative } from "@/components/portfolioChart/page";
-import { ArrowDown, ArrowUp, Bell, Search, Settings, TrendingUp } from "lucide-react";
-import { useState } from "react";
+import { ArrowDownRight, ArrowUpRight, Bell, Search, Settings, TrendingUp, Zap } from "lucide-react";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
 const DiamondPage = () => {
   const [showSearch, setShowSearch] = useState(false);
+  const router = useRouter();
+  
+  // 1. Pull user data from Redux
+  const user = useSelector((state: RootState) => state.auth.user);
+
+  useEffect(() => {
+    if (!user) {
+      router.replace("/login");
+    }
+  }, [user, router]);
+
+  if (!user) {
+    return null;
+  }
+
+  // 2. Logic for Avatar Fallback
+  const userInitial = user?.name ? user.name.charAt(0).toUpperCase() : "U";
 
   return (
-    <div className="min-h-screen bg-slate-50 text-[#03314b] font-sans">
-      {/* Navbar */}
-      <nav className="flex justify-between items-center px-8 py-4 bg-white/80 backdrop-blur-md sticky top-0 z-50 border-b border-gray-200">
-        <div className="flex items-center space-x-4">
+    <div className="min-h-screen bg-white text-slate-900 font-sans selection:bg-emerald-100">
+      {/* Premium Navigation */}
+      <nav className="flex justify-between items-center px-10 py-5 bg-white/70 backdrop-blur-xl sticky top-0 z-50 border-b border-slate-100">
+        <div className="flex items-center space-x-6">
           <div className="relative group">
-            <img
-              className="w-11 h-11 rounded-full border-2 border-emerald-500 p-0.5 object-cover cursor-pointer transition-transform group-hover:scale-105"
-              src="https://i.pinimg.com/564x/5a/7b/c9/5a7bc9ee8614eef19ae0caf54f24af30.jpg"
-              alt="Profile"
-            />
-            <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-white rounded-full"></div>
+            <div className="absolute -inset-1 bg-gradient-to-tr from-emerald-400 to-emerald-600 rounded-full opacity-20 group-hover:opacity-40 transition duration-500"></div>
+            
+            {/* User Profile Image or Initial Fallback */}
+            {user?.profilePic ? (
+              <img
+                className="relative w-12 h-12 rounded-full border-2 border-white object-cover cursor-pointer transition-all"
+                src={user.profilePic}
+                alt={user.name || "Profile"}
+              />
+            ) : (
+              <div className="relative w-12 h-12 rounded-full border-2 border-white bg-slate-900 flex items-center justify-center text-emerald-500 font-black text-xl cursor-pointer">
+                {userInitial}
+              </div>
+            )}
+            
+            <div className="absolute bottom-0 right-0 w-3.5 h-3.5 bg-emerald-500 border-2 border-white rounded-full"></div>
           </div>
-          <div>
-            <h1 className="font-bold text-lg leading-none">Alex Julia</h1>
-            <span className="text-xs text-gray-500 font-medium">Premium Plan</span>
+          <div className="hidden sm:block">
+            {/* Dynamic User Name */}
+            <h1 className="font-black text-slate-900 text-lg tracking-tight leading-none">
+              {user?.name || "Guest User"}
+            </h1>
+            <span className="text-[10px] font-bold text-emerald-600 uppercase tracking-[0.2em] mt-1 inline-block">
+              {user?.role === 'admin' ? 'Institutional Admin' : 'Private Client'}
+            </span>
           </div>
         </div>
 
-        <ul className="hidden md:flex space-x-8 font-semibold text-gray-600">
-          <li className="cursor-pointer hover:text-emerald-600 transition-colors relative after:content-[''] after:absolute after:-bottom-1 after:left-0 after:w-0 after:h-0.5 after:bg-emerald-600 hover:after:w-full after:transition-all">
-            Watchlist
-          </li>
-          <li className="cursor-pointer hover:text-emerald-600 transition-colors relative after:content-[''] after:absolute after:-bottom-1 after:left-0 after:w-0 after:h-0.5 after:bg-emerald-600 hover:after:w-full after:transition-all">
-            Stock Activity
-          </li>
+        <ul className="hidden lg:flex items-center space-x-10 text-[13px] font-bold uppercase tracking-widest text-slate-400">
+          <li className="cursor-pointer text-slate-900 border-b-2 border-emerald-500 pb-1">Portfolio</li>
+          <li className="cursor-pointer hover:text-slate-900 transition-colors">Watchlist</li>
+          <li className="cursor-pointer hover:text-slate-900 transition-colors">Marketplace</li>
         </ul>
 
-        <div className="flex items-center space-x-5">
-          <div className="flex items-center">
+        <div className="flex items-center space-x-4">
+          <div className="flex items-center bg-slate-50 rounded-full px-2 py-1 border border-slate-100">
             {showSearch && (
               <input 
                 autoFocus
                 type="text" 
-                className="rounded-full border border-gray-200 focus:ring-2 focus:ring-emerald-100 focus:border-emerald-400 px-4 py-1.5 text-sm outline-none transition-all w-48 mr-2" 
-                placeholder="Search stocks..." 
+                className="bg-transparent px-3 py-1 text-sm outline-none w-40 transition-all placeholder:text-slate-400 text-slate-900" 
+                placeholder="Search assets..." 
               />
             )}
             <button 
               onClick={() => setShowSearch(!showSearch)}
-              className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+              className="p-2 hover:text-emerald-600 transition-colors text-slate-600"
             >
-              <Search size={20} className="text-gray-600" />
+              <Search size={18} />
             </button>
           </div>
           
-          <div className="relative p-2 hover:bg-gray-100 rounded-full cursor-pointer transition-colors">
-            <Bell size={20} className="text-gray-600" />
-            <span className="absolute top-2 right-2 h-2 w-2 bg-red-500 rounded-full border-2 border-white" /> 
-          </div>
+          <button className="relative p-2.5 bg-slate-50 text-slate-600 rounded-full hover:bg-emerald-50 hover:text-emerald-600 transition-all border border-slate-100">
+            <Bell size={18} />
+            <span className="absolute top-2.5 right-2.5 h-2 w-2 bg-emerald-500 rounded-full border-2 border-white" /> 
+          </button>
         </div>
       </nav>
 
-      {/* Main Content */}
-      <main className="max-w-7xl mx-auto p-8 grid grid-cols-1 lg:grid-cols-3 gap-8">
+      {/* Main Dashboard Layout */}
+      <main className="max-w-[1400px] mx-auto p-10 grid grid-cols-1 lg:grid-cols-12 gap-10">
         
-        {/* Chart Section - Spans 2 columns */}
-        <div className="lg:col-span-2 bg-white p-6 rounded-3xl shadow-sm border border-gray-100">
-          <div className="flex justify-between items-center mb-6">
-            <h2 className="text-xl font-bold flex items-center gap-2">
-              Portfolio Growth <TrendingUp size={20} className="text-emerald-500"/>
-            </h2>
-            <div className="flex bg-gray-100 p-1 rounded-xl">
-              <button className="px-4 py-1.5 text-sm font-medium rounded-lg bg-white shadow-sm">Weekly</button>
-              <button className="px-4 py-1.5 text-sm font-medium text-gray-500 hover:text-gray-700">Daily</button>
+        {/* Left Column: Analytics (8 Cols) */}
+        <div className="lg:col-span-8 space-y-10">
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+            <div className="space-y-2">
+              <h2 className="text-4xl font-black text-slate-900 tracking-tighter flex items-center gap-3">
+                Analytics Hub <TrendingUp className="text-emerald-500" size={32}/>
+              </h2>
+              <p className="text-slate-500 font-medium">
+                Welcome back, {user?.name?.split(' ')[0] || 'Investor'}. Your portfolio is healthy.
+              </p>
+            </div>
+            
+            <div className="inline-flex p-1.5 bg-slate-50 border border-slate-100 rounded-2xl">
+              {['Daily', 'Weekly', 'Monthly'].map((tab) => (
+                <button 
+                  key={tab}
+                  className={`px-6 py-2 text-xs font-bold uppercase tracking-widest rounded-xl transition-all ${
+                    tab === 'Weekly' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-400 hover:text-slate-600'
+                  }`}
+                >
+                  {tab}
+                </button>
+              ))}
             </div>
           </div>
-          <div className="h-[400px] w-full">
+
+          <div className="bg-slate-50/50 border border-slate-100 p-8 rounded-[3rem] aspect-video md:aspect-auto md:h-[500px] relative overflow-hidden group">
+            <div className="absolute top-0 right-0 p-8">
+              <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">
+                <span className="w-2 h-2 rounded-full bg-emerald-500"></span> Live Market
+              </div>
+            </div>
             <ChartBarNegative />
           </div>
         </div>
 
-        {/* Right Sidebar - Financials */}
-        <div className="flex flex-col gap-6">
-          <div className="bg-white p-6 rounded-3xl shadow-sm border border-gray-100">
-            <div className="flex justify-between items-start mb-8">
-              <div className="p-3 bg-emerald-100 text-emerald-700 rounded-2xl">
-                <ArrowDown className="rotate-135" size={24} />
-              </div>
-              <button className="flex items-center gap-1.5 text-xs font-bold text-gray-400 hover:text-emerald-600 transition-colors uppercase tracking-wider">
-                <Settings size={16}/>
-                Manage
-              </button>
-            </div>
+        {/* Right Column: Financial Cards (4 Cols) */}
+        <aside className="lg:col-span-4 space-y-8">
+          
+          {/* Main Balance Card */}
+          <div className="bg-white p-10 rounded-[3rem] border border-slate-100 shadow-2xl shadow-slate-200/40 relative group overflow-hidden">
+            <div className="absolute -top-10 -right-10 w-32 h-32 bg-emerald-50 rounded-full blur-3xl group-hover:bg-emerald-100 transition-colors" />
             
-            <div className="space-y-1 mb-8">
-              <p className="text-gray-500 font-medium">Total Income</p>
-              <h1 className="text-4xl font-bold tracking-tight">$1,235,543</h1>
-              <p className="text-emerald-500 text-sm font-semibold">+12.5% from last month</p>
-            </div>
-
-            <hr className="border-gray-100 mb-6" />
-
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-4">
-                <div className="p-3 bg-rose-100 text-rose-600 rounded-2xl">
-                  <ArrowUp className="rotate-45" size={24} />
+            <div className="relative z-10 space-y-10">
+              <div className="flex justify-between items-center">
+                <div className="p-4 bg-emerald-50 text-emerald-600 rounded-[1.5rem]">
+                  <ArrowDownRight size={28} />
                 </div>
-                <div>
-                  <p className="text-gray-500 text-sm font-medium">Expenses</p>
-                  <p className="text-xl font-bold">$412,000</p>
+                <button className="p-2 text-slate-300 hover:text-slate-900 transition-colors">
+                  <Settings size={20} />
+                </button>
+              </div>
+
+              <div className="space-y-1">
+                <p className="text-[11px] font-black text-slate-400 uppercase tracking-[0.3em]">Net Worth</p>
+                <h3 className="text-5xl font-black text-slate-900 tracking-tighter">
+                  $1,235,543
+                </h3>
+                <div className="flex items-center gap-2 pt-2">
+                   <span className="text-xs font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-md">+12.5%</span>
+                   <span className="text-[10px] font-bold text-slate-400 uppercase tracking-tighter">vs last month</span>
                 </div>
               </div>
-              <div className="text-right">
-                <div className="h-2 w-24 bg-gray-100 rounded-full overflow-hidden">
-                  <div className="h-full bg-rose-400 w-1/3"></div>
+
+              <div className="pt-8 border-t border-slate-50">
+                <div className="flex items-center justify-between group/item cursor-pointer">
+                  <div className="flex items-center gap-4">
+                    <div className="p-3 bg-slate-900 text-white rounded-2xl">
+                      <ArrowUpRight size={20} />
+                    </div>
+                    <div>
+                      <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest leading-none">Monthly Outflow</p>
+                      <p className="text-xl font-bold text-slate-900 mt-1">$412,000</p>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
 
-          {/* Mini Card Example */}
-          <div className="bg-[#03314b] p-6 rounded-3xl text-white shadow-xl shadow-blue-900/10">
-            <h3 className="font-semibold mb-2">Quick Tip</h3>
-            <p className="text-blue-100/70 text-sm">Your tech stocks are performing 15% better than the market average this week.</p>
+          {/* Premium Insight Card */}
+          <div className="bg-slate-900 p-8 rounded-[2.5rem] text-white relative overflow-hidden group">
+            <div className="absolute top-0 right-0 p-4 opacity-20 group-hover:opacity-100 transition-opacity">
+                <Zap className="text-emerald-400" size={40} />
+            </div>
+            <h4 className="text-sm font-black uppercase tracking-[0.2em] text-emerald-400 mb-3">Smart Insight</h4>
+            <p className="text-slate-300 text-sm leading-relaxed font-medium">
+              Your tech cluster is outperforming the S&P 500 by <span className="text-white font-bold">18.4%</span>. Consider rebalancing your energy stakes.
+            </p>
+            <button className="mt-6 text-xs font-black uppercase tracking-widest text-white border-b border-emerald-500 pb-1 hover:text-emerald-400 transition-colors">
+              Rebalance Now →
+            </button>
           </div>
-        </div>
 
+        </aside>
       </main>
     </div>
   );
